@@ -101,6 +101,14 @@ $user_name = 'Ярослав'; // укажите здесь ваше имя
               "image" => "img/lot-6.jpg"
            ],
         ];
+        
+        function formats_num ($num) {
+           $num = ceil($num);
+           if ($num >= 1000) {
+              $num = number_format($num, 0, '', ' ');
+           }
+           return $num ." " ."₽";
+        }
         ?>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
@@ -130,7 +138,7 @@ $user_name = 'Ярослав'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= $good["price"]; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?= formats_num($good["price"]); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
