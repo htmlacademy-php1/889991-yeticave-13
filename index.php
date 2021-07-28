@@ -102,11 +102,17 @@ $user_name = 'Ярослав'; // укажите здесь ваше имя
            ],
         ];
         
-        function formats_num ($num) {
+
+
+        /**
+ * Форматирует цену лота - разделяет пробелом разряды числа, добавляет знак рубля
+ * @param integer $num Цена лота
+ * @return string Как цена будет показываться в карточке
+ */
+        function format_num ($num) {
            $num = ceil($num);
-           if ($num >= 1000) {
-              $num = number_format($num, 0, '', ' ');
-           }
+           $num = number_format($num, 0, '', ' ');
+           
            return $num ." " ."₽";
         }
         ?>
@@ -138,7 +144,7 @@ $user_name = 'Ярослав'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= formats_num($good["price"]); ?></span>
+                            <span class="lot__cost"><?= format_num($good["price"]); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
