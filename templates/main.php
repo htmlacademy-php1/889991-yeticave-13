@@ -1,20 +1,7 @@
 <section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
-        <?php
-
-        /**
- * Форматирует цену лота - разделяет пробелом разряды числа, добавляет знак рубля
- * @param integer $num Цена лота
- * @return string Как цена будет показываться в карточке
- */
-        function format_num ($num) {
-           $num = ceil($num);
-           $num = number_format($num, 0, '', ' ');
-           
-           return $num ." " ."₽";
-        }
-        ?>
+        
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $key => $category): ?>
@@ -29,7 +16,7 @@
             <h2>Открытые лоты</h2>
         </div>
 
-        
+
         <ul class="lots__list">
             <!--заполните этот список из массива с товарами-->
             <?php foreach ($goods as $good): ?>
