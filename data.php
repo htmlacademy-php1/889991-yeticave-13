@@ -46,3 +46,6 @@ $goods = [
               "image" => "img/lot-6.jpg"
            ],
         ];
+$is_auth = rand(0, 1);
+
+$user_name = 'Ярослав';
