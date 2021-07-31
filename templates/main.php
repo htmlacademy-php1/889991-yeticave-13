@@ -1,7 +1,7 @@
 <section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
-        
+
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $key => $category): ?>
@@ -32,8 +32,9 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= format_num(htmlspecialchars($good["price"])); ?></span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
+                        <?php $res = get_time_left(htmlspecialchars($good["expiration"])) ?>
+                        <div class="lot__timer timer <?php if ($res[0] < 1): ?>timer--finishing<?php endif; ?>">
+                            <?= "$res[0] : $res[1]"; ?>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <?php
-$is_auth = rand(0, 1);
+//$is_auth = rand(0, 1);
 
-$user_name = 'Ярослав'; // укажите здесь ваше имя
+//$user_name = 'Ярослав'; // укажите здесь ваше имя
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -44,7 +44,7 @@ $user_name = 'Ярослав'; // укажите здесь ваше имя
                   <a href="#">Выход</a>
                </li>
             </ul>
-         <?php endif; ?>      
+         <?php endif; ?>
         </nav>
     </div>
 </header>
