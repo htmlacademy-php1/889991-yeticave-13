@@ -1,6 +1,4 @@
-CREATE DATABASE yeticave
-  DEFAULT CHARACTER SET utf8
-  DEFAULT COLLATE utf8_general_ci;
+CREATE DATABASE yeticave;
 
 CREATE TABLE yeticave.categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,20 +22,21 @@ CREATE TABLE yeticave.lots (
   start_price INT,
   date_finish DATE,
   step INT,
-  user_name INT,
-  winner VARCHAR(128),
-  categori INT,
-  FOREIGN KEY (user_name) REFERENCES users(id),
-  FOREIGN KEY (categori) REFERENCES categories(id)
+  user_id INT,
+  winner_id INT,
+  categori_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (winner_id) REFERENCES users(id),
+  FOREIGN KEY (categori_id) REFERENCES categories(id)
 );
 CREATE TABLE yeticave.bets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_bet TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   price_bet INT,
-  user_name INT,
-  lot INT,
-  FOREIGN KEY (user_name) REFERENCES users(id),
-  FOREIGN KEY (lot) REFERENCES lots(id)
+  user_id INT,
+  lot_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (lot_id) REFERENCES lots(id)
 );
 
 
