@@ -23,6 +23,7 @@ VALUES
   ('Куртка для сноуборда DC Mutiny Charocal', 'Легкая, теплая и прочная куртка', 'img/lot-5.jpg', 7500, '2021-08-14', 500, 1, 4),
   ('Маска Oakley Canopy', 'Желтые очки, все будет веселенькое', 'img/lot-6.jpg', 5400, '2021-08-15', 100, 1, 6);
 
+
 INSERT INTO bets
 	(price_bet, user_id, lot_id)
 VALUES
