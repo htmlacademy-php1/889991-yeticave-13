@@ -2,30 +2,30 @@
 require_once("helpers.php");
 require_once("functions.php");
 require_once("data.php");
+require_once("init.php");
+require_once("models.php");
 
-$con = mysqli_connect("localhost", "newuser", "", "yeticave");
+
 if (!$con) {
    $error = mysqli_connect_error();
 } else {
    $sql = "SELECT character_code, name_category FROM categories";
    $result = mysqli_query($con, $sql);
-      if($result) {
+   if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-      } else {
+    } else {
         $error = mysqli_error($con);
       }
 }
 
-$sql = "SELECT lots.title, lots.start_price, lots.img, lots.date_finish, categories.name_category FROM lots
-JOIN categories ON lots.category_id=categories.id
-WHERE date_creation > '2021-07-15' ORDER BY date_creation DESC";
+$sql = get_query_list_lots ('2021-07-15');
 
 $res = mysqli_query($con, $sql);
 if ($res) {
    $goods = mysqli_fetch_all($res, MYSQLI_ASSOC);
 } else {
-    $error = mysqli_error($con);
-  }
+   $error = mysqli_error($con);
+}
 
 $page_content = include_template("main.php", [
    "categories" => $categories,
