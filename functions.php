@@ -11,11 +11,11 @@ function format_num ($num) {
     return "$num ₽";
     }
 
-//function console_log( $data ){
-//    echo '<script>';
-//    echo 'console.log('. json_encode( $data ) .')';
-//    echo '</script>';
-//    }
+function console_log( $data ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $data ) .')';
+    echo '</script>';
+    }
 
 /**
  * Возвращеет количество целых часов и остатка минут от настоящего времени до даты
