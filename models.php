@@ -20,20 +20,14 @@ function get_query_lot ($id_lot) {
     JOIN categories ON lots.category_id=categories.id
     WHERE lots.id=$id_lot;";
 }
-
 /**
- * Возвращает массив из объекта результата запроса
- * @param object $result_query mysqli Результат запроса к базе данных
- * @return array 
+ * Формирует SQL-запрос для создания нового лота
+ * @param integer $user_id id пользователя
+ * @return string SQL-запрос
  */
-function get_arrow ($result_query) {
-    $row = mysqli_num_rows($result_query);
-    if ($row === 1) {
-        $arrow = mysqli_fetch_assoc($result_query);
-    } else if ($row > 1) {
-        $arrow = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
-    }
-
-    return $arrow;
+function get_query_create_lot ($user_id) {
+    return "INSERT INTO lots (title, category_id, lot_description, start_price, step, date_finish, img, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, $user_id);";
 }
+
+
 

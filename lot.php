@@ -37,7 +37,7 @@ if ($id) {
     print($page_404);
     print($page_footer);
     die();
-}
+};
 
 $res = mysqli_query($con, $sql);
 if ($res) {
@@ -63,6 +63,7 @@ $page_content = include_template("main-lot.php", [
 ]);
 $layout_content = include_template("layout-lot.php", [
    "content" => $page_content,
+   "categories" => $categories,
    "title" => $lot["title"],
    "is_auth" => $is_auth,
    "user_name" => $user_name
