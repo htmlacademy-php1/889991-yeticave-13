@@ -6,26 +6,15 @@ require_once("init.php");
 require_once("models.php");
 
 
-if (!$con) {
-   $error = mysqli_connect_error();
-} else {
-   $sql = "SELECT id, character_code, name_category FROM categories";
-   $result = mysqli_query($con, $sql);
-   if ($result) {
-        $categories = get_arrow($result);
-        $categories_id = array_column($categories, "id");
-    } else {
-        $error = mysqli_error($con);
-      }
-}
-
+$categories = get_categories($con);
+$categories_id = array_column($categories, "id");
 
 $page_content = include_template("main-add.php", [
    "categories" => $categories
 ]);
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
     $errors = [];
 
@@ -44,8 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $lot = filter_input_array(INPUT_POST, ["lot-name"=>FILTER_DEFAULT, "category"=>FILTER_DEFAULT, "message"=>FILTER_DEFAULT, "lot-rate"=>FILTER_DEFAULT, "lot-step"=>FILTER_DEFAULT, "lot-date"=>FILTER_DEFAULT], true);
-    
+    $lot = filter_input_array(INPUT_POST,
+    [
+        "lot-name"=>FILTER_DEFAULT,
+        "category"=>FILTER_DEFAULT,
+        "message"=>FILTER_DEFAULT,
+        "lot-rate"=>FILTER_DEFAULT,
+        "lot-step"=>FILTER_DEFAULT,
+        "lot-date"=>FILTER_DEFAULT
+    ], true);
+
     foreach ($lot as $field => $value) {
         if (isset($rules[$field])) {
             $rule = $rules[$field];
@@ -90,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = get_query_create_lot(2);
         $stmt = db_get_prepare_stmt_version($con, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
+        
 
     if ($res) {
         $lot_id = mysqli_insert_id($con);
-        console_log($lot_id);
         header("Location: /lot.php?id=" .$lot_id);
     } else {
         $error = mysqli_error($con);
@@ -110,12 +107,9 @@ $layout_content = include_template("layout-add.php", [
    "is_auth" => $is_auth,
    "user_name" => $user_name
 ]);
-$page_footer = include_template("footer.php", [
-   "categories" => $categories
-]);
 
 
 print($page_head);
 print($layout_content);
-print($page_footer);
+
 

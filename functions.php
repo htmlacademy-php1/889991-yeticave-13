@@ -80,9 +80,7 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
         }
 
         $values = array_merge([$stmt, $types], $stmt_data);
-        console_log($values);
         mysqli_stmt_bind_param(...$values);
-
 
         if (mysqli_errno($link) > 0) {
             $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
@@ -129,13 +127,12 @@ function validate_category ($id, $allowed_list) {
 function validate_number ($num) {
     if (!empty($num)) {
         $num *= 1;
-    if (is_int($num) && $num > 0) {
-        return NULL;
-    } else {
+        if (is_int($num) && $num > 0) {
+            return NULL;
+        }
         return "Содержимое поля должно быть целым числом больше ноля";
     }
-}
-}
+};
 
 /**
  * Проверяет что дата окончания торгов не меньше одного дня
@@ -144,14 +141,14 @@ function validate_number ($num) {
  */
 function validate_date ($date) {
     if (is_date_valid($date)) {
-    $now = date_create("now");
-    $d = date_create($date);
-    $diff = date_diff($d, $now);
-    $interval = date_interval_format($diff, "%d");
+        $now = date_create("now");
+        $d = date_create($date);
+        $diff = date_diff($d, $now);
+        $interval = date_interval_format($diff, "%d");
 
-    if ($interval < 1) {
-        return "Дата должна быть больше текущей не менее чем на один день";
-    };
+        if ($interval < 1) {
+            return "Дата должна быть больше текущей не менее чем на один день";
+        };
     } else {
         return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
     }
