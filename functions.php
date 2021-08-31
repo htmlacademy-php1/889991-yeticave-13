@@ -11,11 +11,11 @@ function format_num ($num) {
     return "$num ₽";
     }
 
-//function console_log( $data ){
-//    echo '<script>';
-//    echo 'console.log('. json_encode( $data ) .')';
-//    echo '</script>';
-//    }
+function console_log( $data ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $data ) .')';
+    echo '</script>';
+    }
 
 /**
  * Возвращеет количество целых часов и остатка минут от настоящего времени до даты
@@ -63,7 +63,7 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
         $types = '';
         $stmt_data = [];
 
-        foreach ($data as $value) {
+        foreach ($data as $key => $value) {
             $type = 's';
 
             if (is_int($value)) {
@@ -80,9 +80,7 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
         }
 
         $values = array_merge([$stmt, $types], $stmt_data);
-
         mysqli_stmt_bind_param(...$values);
-
 
         if (mysqli_errno($link) > 0) {
             $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
@@ -92,3 +90,66 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
 
     return $stmt;
 }
+
+/**
+ * Возвращает массив из объекта результата запроса
+ * @param object $result_query mysqli Результат запроса к базе данных
+ * @return array
+ */
+function get_arrow ($result_query) {
+    $row = mysqli_num_rows($result_query);
+    if ($row === 1) {
+        $arrow = mysqli_fetch_assoc($result_query);
+    } else if ($row > 1) {
+        $arrow = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
+    }
+
+    return $arrow;
+}
+
+/**
+ * Валидирует поле категории, если такой категории нет в списке
+ * возвращает сообщение об этом
+ * @param int $id категория, которую ввел пользователь в форму
+ * @param array $allowed_list Список существующих категорий
+ * @return string Текст сообщения об ошибке
+ */
+function validate_category ($id, $allowed_list) {
+    if (!in_array($id, $allowed_list)) {
+        return "Указана несуществующая категория";
+    }
+}
+/**
+ * Проверяет что содержимое поля является числом больше нуля
+ * @param string $num число которое ввел пользователь в форму
+ * @return string Текст сообщения об ошибке
+ */
+function validate_number ($num) {
+    if (!empty($num)) {
+        $num *= 1;
+        if (is_int($num) && $num > 0) {
+            return NULL;
+        }
+        return "Содержимое поля должно быть целым числом больше ноля";
+    }
+};
+
+/**
+ * Проверяет что дата окончания торгов не меньше одного дня
+ * @param string $date дата которую ввел пользователь в форму
+ * @return string Текст сообщения об ошибке
+ */
+function validate_date ($date) {
+    if (is_date_valid($date)) {
+        $now = date_create("now");
+        $d = date_create($date);
+        $diff = date_diff($d, $now);
+        $interval = date_interval_format($diff, "%d");
+
+        if ($interval < 1) {
+            return "Дата должна быть больше текущей не менее чем на один день";
+        };
+    } else {
+        return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
+    }
+};

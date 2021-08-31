@@ -5,7 +5,9 @@
   <title><?= $title; ?></title>
   <link href="../css/normalize.min.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
+  <link href="../css/flatpickr.min.css" rel="stylesheet">
 </head>
+
 <body>
 
 <div class="page-wrapper">
@@ -56,7 +58,6 @@
   </main>
 
 </div>
-
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
@@ -109,5 +110,7 @@
   </div>
 </footer>
 
+<script src="flatpickr.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
