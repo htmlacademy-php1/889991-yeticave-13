@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = get_query_create_lot(2);
         $stmt = db_get_prepare_stmt_version($con, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
-        
+
 
     if ($res) {
         $lot_id = mysqli_insert_id($con);
@@ -98,18 +98,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$page_head = include_template("head.php", [
-    "title" => "Добавить лот"
-]);
-$layout_content = include_template("layout-add.php", [
+$layout_content = include_template("layout.php", [
    "content" => $page_content,
    "categories" => $categories,
+   "title" => "Добавить лот",
    "is_auth" => $is_auth,
    "user_name" => $user_name
 ]);
 
 
-print($page_head);
+
 print($layout_content);
 
 

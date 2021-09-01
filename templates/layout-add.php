@@ -35,7 +35,7 @@
                   <a href="#">Регистрация</a>
                </li>
                <li class="user-menu__item">
-                  <a href="#">Выход</a>
+                  <a href="#">Вход</a>
                </li>
             </ul>
          <?php endif; ?>

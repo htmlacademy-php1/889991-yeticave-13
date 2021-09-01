@@ -1,5 +1,16 @@
-<h2><?= $lot["title"]; ?></h2>
-      <div class="lot-item__content">
+<main>
+    <nav class="nav">
+        <ul class="nav__list container">
+        <?php foreach ($categories as $category): ?>
+            <li class="nav__item">
+                <a href="pages/all-lots.html"><?= $category["name_category"]; ?></a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </nav>
+<section class="lot-item container">
+    <h2><?= $lot["title"]; ?></h2>
+        <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
             <img src="../<?= $lot["img"]; ?>" width="730" height="548" alt="Сноуборд">
@@ -8,6 +19,7 @@
           <p class="lot-item__description"><?= $lot["lot_description"]; ?></p>
         </div>
         <div class="lot-item__right">
+        
           <div class="lot-item__state">
           <?php $res = get_time_left($lot["date_finish"]) ?>
           <div class="lot-item__timer timer <?php if ($res[0] < 1): ?>timer--finishing<?php endif; ?>">
@@ -31,6 +43,7 @@
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
+
           <div class="history">
             <h3>История ставок (<span>10</span>)</h3>
             <table class="history__list">
@@ -85,6 +98,8 @@
                 <td class="history__time">19.03.17 в 10:20</td>
               </tr>
             </table>
-          </div>
         </div>
-      </div>
+        </div>
+    </div>
+</section>
+</main>

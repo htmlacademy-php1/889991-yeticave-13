@@ -5,6 +5,7 @@ require_once("data.php");
 require_once("init.php");
 require_once("models.php");
 
+session_start();
 
 $categories = get_categories($con);
 
@@ -28,6 +29,7 @@ $layout_content = include_template("layout.php", [
     "is_auth" => $is_auth,
     "user_name" => $user_name
 ]);
+
 
 print($layout_content);
 
