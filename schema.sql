@@ -12,7 +12,7 @@ CREATE TABLE users (
   date_registration DATETIME DEFAULT CURRENT_TIMESTAMP,
   email VARCHAR(128) NOT NULL UNIQUE,
   user_name VARCHAR(128),
-  user_password CHAR(60),
+  user_password CHAR(255),
   contacts TEXT
 );
 CREATE TABLE lots (

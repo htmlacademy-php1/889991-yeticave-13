@@ -10,7 +10,6 @@
 
 <body>
 <div class="page-wrapper">
-
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
@@ -29,23 +28,22 @@
             <div class="user-menu__logged">
                <p><?= $user_name; ?></p>
                <a  class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-               <a  class="user-menu__logout" href="#">Выход</a>
+               <a  class="user-menu__logout" href="logout.php">Выход</a>
             </div>
          <?php else: ?>
             <ul class="user-menu__list">
                <li class="user-menu__item">
-                  <a href="#">Регистрация</a>
+                  <a href="sign-up.php">Регистрация</a>
                </li>
                <li class="user-menu__item">
-                  <a href="#">Выход</a>
+                  <a href="login.php">Вход</a>
                </li>
             </ul>
          <?php endif; ?>
         </nav>
     </div>
 </header>
-
-<main class="container"><?= $content; ?></main>
+<?= $content; ?>
 </div>
 
 <footer class="main-footer">
