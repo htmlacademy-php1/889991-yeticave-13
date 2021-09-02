@@ -5,8 +5,6 @@ require_once("data.php");
 require_once("init.php");
 require_once("models.php");
 
-session_start();
-
 $categories = get_categories($con);
 
 $sql = get_query_list_lots ('2021-07-15');

@@ -49,7 +49,7 @@ function get_categories ($con) {
         return $error;
     }
 }
-//New
+
 /**
  * Возвращает массив данных пользователей: адресс электронной почты и имя
  * @param $con Подключение к MySQL
@@ -58,18 +58,17 @@ function get_categories ($con) {
  */
 function get_users_data($con) {
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
-    } else {
-        $sql = "SELECT email, user_name FROM users;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $users_data= get_arrow($result);
-            return $users_data;
-        }
-        $error = mysqli_error($con);
+        $error = mysqli_connect_error();
         return $error;
     }
+    $sql = "SELECT email, user_name FROM users;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $users_data= get_arrow($result);
+        return $users_data;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -81,8 +80,53 @@ function get_query_create_user() {
     return "INSERT INTO users (date_registration, email, user_password, user_name, contacts) VALUES (NOW(), ?, ?, ?, ?);";
 }
 
+/**
+ * Записывает в БД данные пользователя из формы
+ * @param $link mysqli Ресурс соединения
+ * @param array $data Данные пользователя, полученные из формы
+ * @return bool $res Возвращает true в случае успешного выполнения
+ */
+function add_user_database($link, $data = []) {
+    $sql = "INSERT INTO users (date_registration, email, user_password, user_name, contacts) VALUES (NOW(), ?, ?, ?, ?);";
+    $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
+    $stmt = mysqli_prepare($link, $sql);
 
-//login
+    if ($stmt === false) {
+        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        die($errorMsg);
+    }
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $key => $value) {
+            $type = 's';
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+        mysqli_stmt_bind_param(...$values);
+
+        if (mysqli_errno($link) > 0) {
+            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+    }
+    $res = mysqli_stmt_execute($stmt);
+    return $res;
+}
 /**
  * Возвращает массив данных пользователя: id адресс электронной почты имя и хеш пароля
  * @param $con Подключение к MySQL
@@ -94,15 +138,14 @@ function get_login($con, $email) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT id, email, user_name, user_password FROM users WHERE email = '$email'";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $users_data= get_arrow($result);
-            return $users_data;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT id, email, user_name, user_password FROM users WHERE email = '$email'";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $users_data= get_arrow($result);
+        return $users_data;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 

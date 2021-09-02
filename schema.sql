@@ -1,4 +1,5 @@
-CREATE DATABASE yeticave;
+DROP DATABASE IF EXISTS yeticave;
+CREATE DATABASE yeticave CHARACTER SET = utf8;
 USE yeticave;
 
 
