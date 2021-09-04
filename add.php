@@ -10,8 +10,11 @@ $categories = get_categories($con);
 $categories_id = array_column($categories, "id");
 
 if (!$is_auth) {
-    $page_content = include_template("main-403.php", [
+    $header = include_template("header.php", [
         "categories" => $categories
+    ]);
+    $page_content = include_template("main-403.php", [
+        "header" => $header
     ]);
     $layout_content = include_template("layout.php", [
         "content" => $page_content,
@@ -21,6 +24,7 @@ if (!$is_auth) {
         "user_name" => $user_name
     ]);
     print($layout_content);
+    die();
 }
 
 $page_content = include_template("main-add.php", [

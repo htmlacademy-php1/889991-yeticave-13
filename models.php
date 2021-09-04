@@ -89,41 +89,8 @@ function get_query_create_user() {
 function add_user_database($link, $data = []) {
     $sql = "INSERT INTO users (date_registration, email, user_password, user_name, contacts) VALUES (NOW(), ?, ?, ?, ?);";
     $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
-    $stmt = mysqli_prepare($link, $sql);
-
-    if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
-        die($errorMsg);
-    }
-
-    if ($data) {
-        $types = '';
-        $stmt_data = [];
-
-        foreach ($data as $key => $value) {
-            $type = 's';
-
-            if (is_int($value)) {
-                $type = 'i';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
-            }
-
-            if ($type) {
-                $types .= $type;
-                $stmt_data[] = $value;
-            }
-        }
-
-        $values = array_merge([$stmt, $types], $stmt_data);
-        mysqli_stmt_bind_param(...$values);
-
-        if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
-            die($errorMsg);
-        }
-    }
+    
+    $stmt = db_get_prepare_stmt_version($link, $sql, $data);
     $res = mysqli_stmt_execute($stmt);
     return $res;
 }
