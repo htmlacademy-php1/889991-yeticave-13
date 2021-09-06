@@ -9,10 +9,27 @@ require_once("models.php");
 $categories = get_categories($con);
 $categories_id = array_column($categories, "id");
 
-$page_content = include_template("main-add.php", [
-   "categories" => $categories
-]);
+if (!$is_auth) {
+    $header = include_template("header.php", [
+        "categories" => $categories
+    ]);
+    $page_content = include_template("main-403.php", [
+        "header" => $header
+    ]);
+    $layout_content = include_template("layout.php", [
+        "content" => $page_content,
+        "categories" => $categories,
+        "title" => "Доступ запрещен",
+        "is_auth" => $is_auth,
+        "user_name" => $user_name
+    ]);
+    print($layout_content);
+    die();
+}
 
+$page_content = include_template("main-add.php", [
+    "categories" => $categories
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
@@ -82,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "categories" => $categories,
             "lot" => $lot,
             "errors" => $errors
-         ]);
+        ]);
     } else {
         $sql = get_query_create_lot(2);
         $stmt = db_get_prepare_stmt_version($con, $sql, $lot);
@@ -99,11 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $layout_content = include_template("layout.php", [
-   "content" => $page_content,
-   "categories" => $categories,
-   "title" => "Добавить лот",
-   "is_auth" => $is_auth,
-   "user_name" => $user_name
+    "content" => $page_content,
+    "categories" => $categories,
+    "title" => "Добавить лот",
+    "is_auth" => $is_auth,
+    "user_name" => $user_name
 ]);
 
 
