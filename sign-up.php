@@ -7,13 +7,17 @@ require_once("models.php");
 
 
 $categories = get_categories($con);
-
+$header = include_template("header.php", [
+    "categories" => $categories
+]);
 $page_content = include_template("main-sign-up.php", [
+    "header" => $header,
     "categories" => $categories
 ]);
 
 if ($is_auth) {
     $page_content = include_template("main-403.php", [
+        "header" => $header,
         "categories" => $categories
     ]);
     $layout_content = include_template("layout.php", [
@@ -66,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors)) {
         $page_content = include_template("main-sign-up.php", [
             "categories" => $categories,
+            "header" => $header,
             "user" => $user,
             "errors" => $errors
         ]);
@@ -83,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (count($errors)) {
             $page_content = include_template("main-sign-up.php", [
                 "categories" => $categories,
+                "header" => $header,
                 "user" => $user,
                 "errors" => $errors
             ]);
