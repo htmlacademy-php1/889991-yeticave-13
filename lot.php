@@ -38,9 +38,12 @@ if(!$lot) {
     die();
 }
 
-
+$header = include_template("header.php", [
+    "categories" => $categories
+]);
 $page_content = include_template("main-lot.php", [
    "categories" => $categories,
+   "header" => $header,
    "lot" => $lot,
    "is_auth" => $is_auth
 ]);

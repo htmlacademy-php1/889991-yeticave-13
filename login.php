@@ -7,8 +7,11 @@ require_once("models.php");
 
 
 $categories = get_categories($con);
-
+$header = include_template("header.php", [
+    "categories" => $categories
+]);
 $page_content = include_template("main-login.php", [
+    "header" => $header,
     "categories" => $categories
 ]);
 

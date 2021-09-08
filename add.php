@@ -9,10 +9,11 @@ require_once("models.php");
 $categories = get_categories($con);
 $categories_id = array_column($categories, "id");
 
-if (!$is_auth) {
-    $header = include_template("header.php", [
+$header = include_template("header.php", [
         "categories" => $categories
     ]);
+
+if (!$is_auth) {
     $page_content = include_template("main-403.php", [
         "header" => $header
     ]);
@@ -28,7 +29,8 @@ if (!$is_auth) {
 }
 
 $page_content = include_template("main-add.php", [
-    "categories" => $categories
+    "categories" => $categories,
+    "header" => $header
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -97,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors)) {
         $page_content = include_template("main-add.php", [
             "categories" => $categories,
+            "header" => $header,
             "lot" => $lot,
             "errors" => $errors
         ]);
