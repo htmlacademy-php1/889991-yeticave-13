@@ -6,7 +6,7 @@ require_once("init.php");
 require_once("models.php");
 
 $categories = get_categories($con);
-$search = htmlspecialchars($_GET["search"]);
+$search = $_GET["search"];
 if ($search) {
     $items_count = get_count_lots($con, $search);
     $cur_page = $_GET["page"] ?? 1;
