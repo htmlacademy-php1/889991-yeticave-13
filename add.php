@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "errors" => $errors
         ]);
     } else {
-        $sql = get_query_create_lot(2);
+        $sql = get_query_create_lot($_SESSION["id"]);
         $stmt = db_get_prepare_stmt_version($con, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
 
