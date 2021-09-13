@@ -222,7 +222,7 @@ function get_bets ($con, $id) {
     $error = mysqli_connect_error();
     return $error;
     } else {
-        $sql = "SELECT DATE_FORMAT(bets.date_bet, '%d.%m.%y %H:%i') AS date_bet, bets.price_bet, lots.title, lots.lot_description, lots.img, lots.date_finish, lots.id, categories.name_category
+        $sql = "SELECT DATE_FORMAT(bets.date_bet, '%d.%m.%y %H:%i') AS date_bet, bets.price_bet, lots.title, lots.lot_description, lots.img, lots.date_finish, lots.id, lots.winner_id, categories.name_category, users.contacts
         FROM bets
         JOIN lots ON bets.lot_id=lots.id
         JOIN users ON bets.user_id=users.id
@@ -238,4 +238,165 @@ function get_bets ($con, $id) {
         return $error;
     }
 }
+/**
+ * Возвращает массив лотов у которых истек срок окончания торгов и нет победетеля
+ * @param $con Подключение к MySQL
+ * @return [Array | String] $lots массив лотов
+ * или описание последней ошибки подключения
+ */
+function get_lot_date_finish ($con) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT * FROM lots
+        where winner_id IS NULL && date_finish <= now();";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            return $lots;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
 
+/**
+ * Возвращает последнюю ставку на лот
+ * @param $con Подключение к MySQL
+ * @param $id ID лота
+ * @return [Array | String] $bet массив с описанием ставки
+ * или описание последней ошибки подключения
+ */
+function get_last_bet ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT * FROM bets
+        where lot_id = $id
+        ORDER BY date_bet DESC LIMIT 1;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $bet = get_arrow($result);
+            return $bet;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Записывает в таблицу лотов в базе данных ID победителя торгов по конкретному лоту
+ * @param $con Подключение к MySQL
+ * @param $winer_id ID победителя торгов
+ * @param $lot_id ID лота
+ * @return [Bool | String] $res Возвращает true в случае успешной записи
+ * или описание последней ошибки подключения
+ */
+function add_winner ($con, $winer_id, $lot_id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "UPDATE lots SET winner_id=$winer_id WHERE id = $lot_id";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            return $result;
+        }
+            $error = mysqli_error($con);
+            return $error;
+    }
+}
+
+function viewing_lots ($con) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT id, title, winner_id FROM lots WHERE winner_id !=0;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            return $lots;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Возвращает email, телефон и имя пользователя по id
+ * @param $con Подключение к MySQL
+ * @param $id ID пользователя
+ * @return [Array | String] $user_date массив
+ * или описание последней ошибки подключения
+ */
+function get_user_contacts ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT users.user_name, users.email, users.contacts FROM users
+        WHERE id=$id;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $user_date = get_arrow($result);
+            return $user_date;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Возвращает имя пользователя и название лота для письма
+ * @param $con Подключение к MySQL
+ * @param $id ID лота
+ * @return [Array | String] $data массив
+ * или описание последней ошибки подключения
+ */
+function get_user_win ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT lots.id, lots.title, users.user_name, users.contacts
+        FROM bets
+        JOIN lots ON bets.lot_id=lots.id
+        JOIN users ON bets.user_id=users.id
+        WHERE lots.id = $id;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $data = get_arrow($result);
+            return $data;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Возвращает контакты владельца лота
+ * @param $con Подключение к MySQL
+ * @param $id ID лота
+ * @return [Array | String] $contacts массив
+ * или описание последней ошибки подключения
+ */
+function get_user_tell ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT  users.contacts AS tell FROM lots
+        JOIN users ON users.id=lots.user_id
+        WHERE lots.id = $id;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $contacts = get_arrow($result);
+            return $contacts;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}

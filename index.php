@@ -4,6 +4,7 @@ require_once("functions.php");
 require_once("data.php");
 require_once("init.php");
 require_once("models.php");
+require_once("getwinner.php");
 
 $categories = get_categories($con);
 
@@ -15,6 +16,10 @@ if ($res) {
 } else {
     $error = mysqli_error($con);
 }
+$get_winner = include_template("getwinner.php", [
+    "lots" => $lots,
+    "bet" => $bet
+]);
 
 $page_content = include_template("main.php", [
     "categories" => $categories,
