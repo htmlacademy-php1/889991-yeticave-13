@@ -3,8 +3,6 @@
 
 <div class="container">
     <section class="lots">
-
-       
         <ul class="lots__list">
             <?php foreach ($goods as $good): ?>
             <li class="lots__item lot">
