@@ -6,7 +6,7 @@
         <ul class="promo__list">
             <?php foreach ($categories as $category): ?>
             <li class="promo__item promo__item--<?= $category["character_code"]; ?>">
-                <a class="promo__link" href="pages/all-lots.html"><?= $category["name_category"]; ?></a>
+                <a class="promo__link" href="all-lots.php?category_id=<?= $category["id"]; ?>"><?= $category["name_category"]; ?></a>
             </li>
             <?php endforeach; ?>
         </ul>
@@ -19,6 +19,7 @@
 
         <ul class="lots__list">
             <?php foreach ($goods as $good): ?>
+            <?php if (array_sum(get_time_left($good["date_finish"]))): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?= $good["img"]; ?>" width="350" height="260" alt="">
@@ -38,6 +39,7 @@
                     </div>
                 </div>
             </li>
+            <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </section>

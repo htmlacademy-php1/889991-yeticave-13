@@ -15,7 +15,9 @@ foreach($lots as $lot) {
     $id_lot = $lot["id"];
     $bets_win[] = $bet;
     $res = add_winner($con, $bet["user_id"], $id);
+    }
 }
+
 if (!empty($bets_win)) {
 
 $win_users = [];
@@ -52,6 +54,6 @@ if ($result) {
     print ("Рассылка успешно отправленна");
 } else {
     print ("Не удалось отправить рассылку");
+    }
 }
-}
-}
+

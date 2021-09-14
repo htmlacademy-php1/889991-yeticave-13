@@ -246,8 +246,8 @@ function get_bets ($con, $id) {
  */
 function get_lot_date_finish ($con) {
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     } else {
         $sql = "SELECT * FROM lots
         where winner_id IS NULL && date_finish <= now();";
@@ -270,8 +270,8 @@ function get_lot_date_finish ($con) {
  */
 function get_last_bet ($con, $id) {
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     } else {
         $sql = "SELECT * FROM bets
         where lot_id = $id
@@ -296,8 +296,8 @@ function get_last_bet ($con, $id) {
  */
 function add_winner ($con, $winer_id, $lot_id) {
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     } else {
         $sql = "UPDATE lots SET winner_id=$winer_id WHERE id = $lot_id";
         $result = mysqli_query($con, $sql);
@@ -311,8 +311,8 @@ function add_winner ($con, $winer_id, $lot_id) {
 
 function viewing_lots ($con) {
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     } else {
         $sql = "SELECT id, title, winner_id FROM lots WHERE winner_id !=0;";
         $result = mysqli_query($con, $sql);
@@ -395,6 +395,79 @@ function get_user_tell ($con, $id) {
         if ($result) {
             $contacts = get_arrow($result);
             return $contacts;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Возвращает количество лотов данной категории
+ * @param $con mysqli Ресурс соединения
+ * @param int $id - id категории
+ * @return [int | String] $count Количество лотов
+ * или описание последней ошибки подключения
+ */
+function get_count_lot_cat ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $sql = "SELECT COUNT(*) as cnt FROM lots
+        WHERE category_id=$id";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+            return $count;
+        }
+        $error = mysqli_error($con);
+        return $error;
+    }
+}
+
+/**
+ * Возвращает массив лотов соответствующей категории
+ * @param $link mysqli Ресурс соединения
+ * @param int $id - id категории
+ * @return [Array | String] $goods Двумерный массив лотов, в названии или описании которых есть такие слова
+ * или описание последней ошибки подключения
+ */
+function get_lots_cat ($con, $id, $limit, $offset) {
+    if (!$con) {
+        $error = mysqli_connect_error();
+        return $error;
+        } else {
+            $sql = "SELECT * FROM lots
+            WHERE category_id=$id ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
+            $result = mysqli_query($con, $sql);
+            if ($result) {
+                $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                return $goods;
+            }
+            $error = mysqli_error($con);
+            return $error;
+        }
+}
+
+/**
+ * Возвращает название категории
+ * @param $con mysqli Ресурс соединения
+ * @param int $id - id категории
+ * @return [String | String] $count Количество лотов
+ * или описание последней ошибки подключения
+ */
+function get_category_name ($con, $id) {
+    if (!$con) {
+    $error = mysqli_connect_error();
+    return $error;
+    } else {
+        $id = intval($id);
+        $sql = "SELECT name_category FROM categories
+        WHERE id = $id";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $count = mysqli_fetch_assoc($result)["name_category"];
+            return $count;
         }
         $error = mysqli_error($con);
         return $error;
