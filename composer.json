@@ -1,0 +1,9 @@
+{
+    "name": "hero/yeticave",
+    "description": "Website for ski equipment auction",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

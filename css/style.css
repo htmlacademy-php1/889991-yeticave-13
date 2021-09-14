@@ -787,7 +787,7 @@ main.container {
 }
 
 .form__item--small {
-  width: 160px
+  width: 160px;
 }
 
 .form__item--wide {
@@ -846,7 +846,7 @@ main.container {
   color: #f84646;
 }
 
-input:invalid .form__error{
+input:invalid .form__error {
   display: block;
 }
 
@@ -893,7 +893,8 @@ input:invalid .form__error{
   box-sizing: border-box;
 }
 
-.form__input-file input:active, .form__input-file input:focus {
+.form__input-file input:active,
+.form__input-file input:focus {
   outline: none;
   border-color: #fff;
 }
@@ -1172,6 +1173,7 @@ input:invalid .form__error{
   margin: 0;
   font-size: 16px;
   font-weight: 700;
+  margin-right: 20px;
 }
 
 .rates__title a {
