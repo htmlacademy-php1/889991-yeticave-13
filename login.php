@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user_info = filter_input_array(INPUT_POST,
     [
-        "email"=>FILTER_DEFAULT,
-        "password"=>FILTER_DEFAULT
+        "email"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "password"=>FILTER_SANITIZE_SPECIAL_CHARS
     ], true);
 
     foreach ($user_info as $field => $value) {
