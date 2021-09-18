@@ -44,8 +44,5 @@
         </li>
     </ul>
 <?php endif; ?>
-    </div>
-
-
 </div>
 </main>
