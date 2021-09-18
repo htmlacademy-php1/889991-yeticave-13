@@ -38,16 +38,15 @@ function get_categories ($con) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT id, character_code, name_category FROM categories;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $categories = get_arrow($result);
-            return $categories;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT id, character_code, name_category FROM categories;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $categories = get_arrow($result);
+        return $categories;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -76,9 +75,6 @@ function get_users_data($con) {
  * @param integer $user_id id пользователя
  * @return string SQL-запрос
  */
-function get_query_create_user() {
-    return "INSERT INTO users (date_registration, email, user_password, user_name, contacts) VALUES (NOW(), ?, ?, ?, ?);";
-}
 
 /**
  * Записывает в БД данные пользователя из формы
@@ -131,9 +127,9 @@ function get_found_lots($link, $words, $limit, $offset) {
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 's', $words);
     mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    if ($res) {
-        $goods = get_arrow($res);
+    $result = mysqli_stmt_get_result($stmt);
+    if ($result) {
+        $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $goods;
     }
     $error = mysqli_error($con);
@@ -193,21 +189,21 @@ function get_bets_history ($con, $id_lot) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT users.user_name, bets.price_bet, DATE_FORMAT(date_bet, '%d.%m.%y %H:%i') AS date_bet
-        FROM bets
-        JOIN lots ON bets.lot_id=lots.id
-        JOIN users ON bets.user_id=users.id
-        WHERE lots.id=$id_lot
-        ORDER BY bets.date_bet DESC LIMIT 10;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $list_bets = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            return $list_bets;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT users.user_name, bets.price_bet, DATE_FORMAT(date_bet, '%d.%m.%y %H:%i') AS date_bet
+    FROM bets
+    JOIN lots ON bets.lot_id=lots.id
+    JOIN users ON bets.user_id=users.id
+    WHERE lots.id=$id_lot
+    ORDER BY bets.date_bet DESC LIMIT 10;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $list_bets = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $list_bets;
+    }
+    $error = mysqli_error($con);
+    return $error;
+
 }
 /**
  * Возвращает массив ставок пользователя
@@ -221,22 +217,22 @@ function get_bets ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT DATE_FORMAT(bets.date_bet, '%d.%m.%y %H:%i') AS date_bet, bets.price_bet, lots.title, lots.lot_description, lots.img, lots.date_finish, lots.id, lots.winner_id, categories.name_category, users.contacts
-        FROM bets
-        JOIN lots ON bets.lot_id=lots.id
-        JOIN users ON bets.user_id=users.id
-        JOIN categories ON lots.category_id=categories.id
-        WHERE bets.user_id=$id
-        ORDER BY bets.date_bet DESC;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $list_bets = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            return $list_bets;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT DATE_FORMAT(bets.date_bet, '%d.%m.%y %H:%i') AS date_bet, bets.price_bet, lots.title, lots.lot_description, lots.img, lots.date_finish, lots.id, lots.winner_id, categories.name_category, users.contacts
+    FROM bets
+    JOIN lots ON bets.lot_id=lots.id
+    JOIN users ON bets.user_id=users.id
+    JOIN categories ON lots.category_id=categories.id
+    WHERE bets.user_id=$id
+    ORDER BY bets.date_bet DESC;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $list_bets = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $list_bets;
+    }
+    $error = mysqli_error($con);
+    return $error;
+
 }
 /**
  * Возвращает массив лотов у которых истек срок окончания торгов и нет победетеля
@@ -248,17 +244,16 @@ function get_lot_date_finish ($con) {
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
-    } else {
-        $sql = "SELECT * FROM lots
-        where winner_id IS NULL && date_finish <= now();";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            return $lots;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT * FROM lots
+    where winner_id IS NULL && date_finish <= now();";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $lots;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -272,18 +267,18 @@ function get_last_bet ($con, $id) {
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
-    } else {
-        $sql = "SELECT * FROM bets
-        where lot_id = $id
-        ORDER BY date_bet DESC LIMIT 1;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $bet = get_arrow($result);
-            return $bet;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT * FROM bets
+    where lot_id = $id
+    ORDER BY date_bet DESC LIMIT 1;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $bet = get_arrow($result);
+        return $bet;
+    }
+    $error = mysqli_error($con);
+    return $error;
+
 }
 
 /**
@@ -298,31 +293,15 @@ function add_winner ($con, $winer_id, $lot_id) {
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
-    } else {
-        $sql = "UPDATE lots SET winner_id=$winer_id WHERE id = $lot_id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            return $result;
-        }
-            $error = mysqli_error($con);
-            return $error;
     }
-}
-
-function viewing_lots ($con) {
-    if (!$con) {
-        $error = mysqli_connect_error();
-        return $error;
-    } else {
-        $sql = "SELECT id, title, winner_id FROM lots WHERE winner_id !=0;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            return $lots;
-        }
+    $sql = "UPDATE lots SET winner_id=$winer_id WHERE id = $lot_id";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        return $result;
+    }
         $error = mysqli_error($con);
         return $error;
-    }
+
 }
 
 /**
@@ -336,17 +315,16 @@ function get_user_contacts ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT users.user_name, users.email, users.contacts FROM users
-        WHERE id=$id;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $user_date = get_arrow($result);
-            return $user_date;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT users.user_name, users.email, users.contacts FROM users
+    WHERE id=$id;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $user_date = get_arrow($result);
+        return $user_date;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -360,20 +338,19 @@ function get_user_win ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT lots.id, lots.title, users.user_name, users.contacts
-        FROM bets
-        JOIN lots ON bets.lot_id=lots.id
-        JOIN users ON bets.user_id=users.id
-        WHERE lots.id = $id;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $data = get_arrow($result);
-            return $data;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT lots.id, lots.title, users.user_name, users.contacts
+    FROM bets
+    JOIN lots ON bets.lot_id=lots.id
+    JOIN users ON bets.user_id=users.id
+    WHERE lots.id = $id;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $data = get_arrow($result);
+        return $data;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -387,18 +364,18 @@ function get_user_tell ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT  users.contacts AS tell FROM lots
-        JOIN users ON users.id=lots.user_id
-        WHERE lots.id = $id;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $contacts = get_arrow($result);
-            return $contacts;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT  users.contacts AS tell FROM lots
+    JOIN users ON users.id=lots.user_id
+    WHERE lots.id = $id;";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $contacts = get_arrow($result);
+        return $contacts;
+    }
+    $error = mysqli_error($con);
+    return $error;
+
 }
 
 /**
@@ -412,17 +389,16 @@ function get_count_lot_cat ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $sql = "SELECT COUNT(*) as cnt FROM lots
-        WHERE category_id=$id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $count = mysqli_fetch_assoc($result)["cnt"];
-            return $count;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $sql = "SELECT COUNT(*) as cnt FROM lots
+    WHERE category_id=$id";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $count = mysqli_fetch_assoc($result)["cnt"];
+        return $count;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -436,17 +412,16 @@ function get_lots_cat ($con, $id, $limit, $offset) {
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
-        } else {
-            $sql = "SELECT * FROM lots
-            WHERE category_id=$id ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
-            $result = mysqli_query($con, $sql);
-            if ($result) {
-                $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                return $goods;
-            }
-            $error = mysqli_error($con);
-            return $error;
         }
+        $sql = "SELECT * FROM lots
+        WHERE category_id=$id ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
+        $result = mysqli_query($con, $sql);
+        if ($result) {
+            $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            return $goods;
+        }
+        $error = mysqli_error($con);
+        return $error;
 }
 
 /**
@@ -460,16 +435,16 @@ function get_category_name ($con, $id) {
     if (!$con) {
     $error = mysqli_connect_error();
     return $error;
-    } else {
-        $id = intval($id);
-        $sql = "SELECT name_category FROM categories
-        WHERE id = $id";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $count = mysqli_fetch_assoc($result)["name_category"];
-            return $count;
-        }
-        $error = mysqli_error($con);
-        return $error;
     }
+    $id = intval($id);
+    $sql = "SELECT name_category FROM categories
+    WHERE id = $id";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $count = mysqli_fetch_assoc($result)["name_category"];
+        return $count;
+    }
+    $error = mysqli_error($con);
+    return $error;
+
 }

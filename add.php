@@ -54,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $lot = filter_input_array(INPUT_POST,
     [
-        "lot-name"=>FILTER_DEFAULT,
-        "category"=>FILTER_DEFAULT,
-        "message"=>FILTER_DEFAULT,
-        "lot-rate"=>FILTER_DEFAULT,
-        "lot-step"=>FILTER_DEFAULT,
+        "lot-name"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "category"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "message"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "lot-rate"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "lot-step"=>FILTER_SANITIZE_SPECIAL_CHARS,
         "lot-date"=>FILTER_DEFAULT
     ], true);
 

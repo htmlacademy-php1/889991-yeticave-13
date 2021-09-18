@@ -48,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = filter_input_array(INPUT_POST,
     [
-        "email"=>FILTER_DEFAULT,
-        "password"=>FILTER_DEFAULT,
-        "name"=>FILTER_DEFAULT,
-        "message"=>FILTER_DEFAULT
+        "email"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "password"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "name"=>FILTER_SANITIZE_SPECIAL_CHARS,
+        "message"=>FILTER_SANITIZE_SPECIAL_CHARS
     ], true);
 
     foreach ($user as $field => $value) {
@@ -93,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "errors" => $errors
             ]);
         } else {
-            $res = add_user_database($con, $user);
-            if ($res) {
+            $result = add_user_database($con, $user);
+            if ($result) {
                 header("Location: /login.php");
             } else {
                 $error = mysqli_error($con);
