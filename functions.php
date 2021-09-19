@@ -4,19 +4,21 @@
  * @param integer $num Цена лота
  * @return string Как цена будет показываться в карточке
 */
-function format_num ($num) {
+function format_num($num)
+{
     $num = ceil($num);
     $num = number_format($num, 0, '', ' ');
 
     return "$num ₽";
-    }
+}
 
 /**
  * Возвращеет количество целых часов и остатка минут от настоящего времени до даты
  * @param string $date Дата истечения времени
  * @return array
 */
-function get_time_left ($date) {
+function get_time_left($date)
+{
     date_default_timezone_set('Europe/Moscow');
     $final_date = date_create($date);
     $cur_date = date_create("now");
@@ -37,7 +39,7 @@ function get_time_left ($date) {
     $res[] = $minutes;
 
     return $res;
-    }
+}
 
 
     /**
@@ -49,7 +51,8 @@ function get_time_left ($date) {
  *
  * @return stmt Подготовленное выражение
  */
-function db_get_prepare_stmt_version($link, $sql, $data = []) {
+function db_get_prepare_stmt_version($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -66,8 +69,7 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_double($value)) {
+            } elseif (is_double($value)) {
                 $type = 'd';
             }
 
@@ -94,11 +96,12 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
  * @param object $result_query mysqli Результат запроса к базе данных
  * @return array
  */
-function get_arrow ($result_query) {
+function get_arrow($result_query)
+{
     $row = mysqli_num_rows($result_query);
     if ($row === 1) {
         $arrow = mysqli_fetch_assoc($result_query);
-    } else if ($row > 1) {
+    } elseif ($row > 1) {
         $arrow = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
     }
 
@@ -112,7 +115,8 @@ function get_arrow ($result_query) {
  * @param array $allowed_list Список существующих категорий
  * @return string Текст сообщения об ошибке
  */
-function validate_category ($id, $allowed_list) {
+function validate_category($id, $allowed_list)
+{
     if (!in_array($id, $allowed_list)) {
         return "Указана несуществующая категория";
     }
@@ -122,11 +126,12 @@ function validate_category ($id, $allowed_list) {
  * @param string $num число которое ввел пользователь в форму
  * @return string Текст сообщения об ошибке
  */
-function validate_number ($num) {
+function validate_number($num)
+{
     if (!empty($num)) {
         $num *= 1;
         if (is_int($num) && $num > 0) {
-            return NULL;
+            return null;
         }
         return "Содержимое поля должно быть целым числом больше ноля";
     }
@@ -137,7 +142,8 @@ function validate_number ($num) {
  * @param string $date дата которую ввел пользователь в форму
  * @return string Текст сообщения об ошибке
  */
-function validate_date ($date) {
+function validate_date($date)
+{
     if (is_date_valid($date)) {
         $now = date_create("now");
         $d = date_create($date);
@@ -148,7 +154,7 @@ function validate_date ($date) {
             return "Дата должна быть больше текущей не менее чем на один день";
         };
     } else {
-    return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
+        return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
     }
 };
 
@@ -157,7 +163,8 @@ function validate_date ($date) {
  * @param string $email адрес электронной почты
  * @return string Текст сообщения об ошибке
  */
-function validate_email ($email) {
+function validate_email($email)
+{
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "E-mail должен быть корректным";
     }
@@ -170,7 +177,8 @@ function validate_email ($email) {
  * @param int $max максимальное количество символов
  * @return string Текст сообщения об ошибке
  */
-function validate_length ($value, $min, $max) {
+function validate_length($value, $min, $max)
+{
     if ($value) {
         $len = strlen($value);
         if ($len < $min or $len > $max) {
