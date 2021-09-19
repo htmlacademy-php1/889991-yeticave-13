@@ -8,7 +8,7 @@ require_once("getwinner.php");
 
 $categories = get_categories($con);
 
-$sql = get_query_list_lots ('2021-07-15');
+$sql = get_query_list_lots ();
 
 $res = mysqli_query($con, $sql);
 if ($res) {
@@ -16,10 +16,6 @@ if ($res) {
 } else {
     $error = mysqli_error($con);
 }
-$get_winner = include_template("getwinner.php", [
-    "lots" => $lots,
-    "bet" => $bet
-]);
 
 $page_content = include_template("main.php", [
     "categories" => $categories,

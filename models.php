@@ -4,10 +4,10 @@
  * @param string $date Дата в виде строки, в формате 'YYYY-MM-DD'
  * @return string SQL-запрос
  */
-function get_query_list_lots ($date) {
+function get_query_list_lots () {
     return "SELECT lots.id, lots.title, lots.start_price, lots.img, lots.date_finish, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
-    WHERE date_creation > $date ORDER BY date_creation DESC;";
+    ORDER BY date_creation DESC;";
 }
 
 /**
@@ -70,11 +70,6 @@ function get_users_data($con) {
     return $error;
 }
 
-/**
- * Формирует SQL-запрос для регистрации нового пользователя
- * @param integer $user_id id пользователя
- * @return string SQL-запрос
- */
 
 /**
  * Записывает в БД данные пользователя из формы
