@@ -10,3 +10,4 @@ vendor
 uploads/*
 !uploads/.gitkeep
 .vscode/launch.json
+.php-cs-fixer.cache
