@@ -10,9 +10,9 @@ $categories = get_categories($con);
 
 $sql = get_query_list_lots ();
 
-$res = mysqli_query($con, $sql);
-if ($res) {
-    $goods = get_arrow($res);
+$result = mysqli_query($con, $sql);
+if ($result) {
+    $goods = get_arrow($result);
 } else {
     $error = mysqli_error($con);
 }

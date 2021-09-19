@@ -4,7 +4,8 @@
  * @param string $date Дата в виде строки, в формате 'YYYY-MM-DD'
  * @return string SQL-запрос
  */
-function get_query_list_lots () {
+function get_query_list_lots()
+{
     return "SELECT lots.id, lots.title, lots.start_price, lots.img, lots.date_finish, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
     ORDER BY date_creation DESC;";
@@ -15,7 +16,8 @@ function get_query_list_lots () {
  * @param integer $id_lot id лота
  * @return string SQL-запрос
  */
-function get_query_lot ($id_lot) {
+function get_query_lot($id_lot)
+{
     return "SELECT lots.title, lots.start_price, lots.img, lots.date_finish, lots.lot_description, lots.step, lots.user_id, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
     WHERE lots.id=$id_lot;";
@@ -25,7 +27,8 @@ function get_query_lot ($id_lot) {
  * @param integer $user_id id пользователя
  * @return string SQL-запрос
  */
-function get_query_create_lot ($user_id) {
+function get_query_create_lot($user_id)
+{
     return "INSERT INTO lots (title, category_id, lot_description, start_price, step, date_finish, img, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, $user_id);";
 }
 /**
@@ -34,10 +37,11 @@ function get_query_create_lot ($user_id) {
  * @return [Array | String] $categories Ассоциативный массив с категориями лотов из базы данных
  * или описание последней ошибки подключения
  */
-function get_categories ($con) {
+function get_categories($con)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT id, character_code, name_category FROM categories;";
     $result = mysqli_query($con, $sql);
@@ -55,7 +59,8 @@ function get_categories ($con) {
  * @return [Array | String] $users_data Двумерный массив с именами и емейлами пользователей
  * или описание последней ошибки подключения
  */
-function get_users_data($con) {
+function get_users_data($con)
+{
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
@@ -77,7 +82,8 @@ function get_users_data($con) {
  * @param array $data Данные пользователя, полученные из формы
  * @return bool $res Возвращает true в случае успешного выполнения
  */
-function add_user_database($link, $data = []) {
+function add_user_database($link, $data = [])
+{
     $sql = "INSERT INTO users (date_registration, email, user_password, user_name, contacts) VALUES (NOW(), ?, ?, ?, ?);";
     $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
 
@@ -92,10 +98,11 @@ function add_user_database($link, $data = []) {
  * @return [Array | String] $users_data Массив с данными пользователя: id адресс электронной почты имя и хеш пароля
  * или описание последней ошибки подключения
  */
-function get_login($con, $email) {
+function get_login($con, $email)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT id, email, user_name, user_password FROM users WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
@@ -114,7 +121,8 @@ function get_login($con, $email) {
  * @return [Array | String] $goods Двумерный массив лотов, в названии или описании которых есть такие слова
  * или описание последней ошибки подключения
  */
-function get_found_lots($link, $words, $limit, $offset) {
+function get_found_lots($link, $words, $limit, $offset)
+{
     $sql = "SELECT lots.id, lots.title, lots.start_price, lots.img, lots.date_finish, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
     WHERE MATCH(title, lot_description) AGAINST(?) ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
@@ -137,7 +145,8 @@ function get_found_lots($link, $words, $limit, $offset) {
  * @return [int | String] $count Количество лотов, в названии или описании которых есть такие слова
  * или описание последней ошибки подключения
  */
-function get_count_lots($link, $words) {
+function get_count_lots($link, $words)
+{
     $sql = "SELECT COUNT(*) as cnt FROM lots
     WHERE MATCH(title, lot_description) AGAINST(?);";
 
@@ -161,7 +170,8 @@ function get_count_lots($link, $words) {
  * @param int $lot_id ID лота
  * @return bool $res Возвращает true в случае успешной записи
  */
-function add_bet_database($link, $sum, $user_id, $lot_id) {
+function add_bet_database($link, $sum, $user_id, $lot_id)
+{
     $sql = "INSERT INTO bets (date_bet, price_bet, user_id, lot_id) VALUE (NOW(), ?, $user_id, $lot_id);";
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $sum);
@@ -180,10 +190,11 @@ function add_bet_database($link, $sum, $user_id, $lot_id) {
  * @return [Array | String] $list_bets Ассоциативный массив со списком ставок на этот лот из базы данных
  * или описание последней ошибки подключения
  */
-function get_bets_history ($con, $id_lot) {
+function get_bets_history($con, $id_lot)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT users.user_name, bets.price_bet, DATE_FORMAT(date_bet, '%d.%m.%y %H:%i') AS date_bet
     FROM bets
@@ -198,7 +209,6 @@ function get_bets_history ($con, $id_lot) {
     }
     $error = mysqli_error($con);
     return $error;
-
 }
 /**
  * Возвращает массив ставок пользователя
@@ -208,10 +218,11 @@ function get_bets_history ($con, $id_lot) {
  *  пользователя из базы данных
  * или описание последней ошибки подключения
  */
-function get_bets ($con, $id) {
+function get_bets($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT DATE_FORMAT(bets.date_bet, '%d.%m.%y %H:%i') AS date_bet, bets.price_bet, lots.title, lots.lot_description, lots.img, lots.date_finish, lots.id, lots.winner_id, categories.name_category, users.contacts
     FROM bets
@@ -227,7 +238,6 @@ function get_bets ($con, $id) {
     }
     $error = mysqli_error($con);
     return $error;
-
 }
 /**
  * Возвращает массив лотов у которых истек срок окончания торгов и нет победетеля
@@ -235,7 +245,8 @@ function get_bets ($con, $id) {
  * @return [Array | String] $lots массив лотов
  * или описание последней ошибки подключения
  */
-function get_lot_date_finish ($con) {
+function get_lot_date_finish($con)
+{
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
@@ -258,7 +269,8 @@ function get_lot_date_finish ($con) {
  * @return [Array | String] $bet массив с описанием ставки
  * или описание последней ошибки подключения
  */
-function get_last_bet ($con, $id) {
+function get_last_bet($con, $id)
+{
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
@@ -273,7 +285,6 @@ function get_last_bet ($con, $id) {
     }
     $error = mysqli_error($con);
     return $error;
-
 }
 
 /**
@@ -284,7 +295,8 @@ function get_last_bet ($con, $id) {
  * @return [Bool | String] $res Возвращает true в случае успешной записи
  * или описание последней ошибки подключения
  */
-function add_winner ($con, $winer_id, $lot_id) {
+function add_winner($con, $winer_id, $lot_id)
+{
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
@@ -294,9 +306,8 @@ function add_winner ($con, $winer_id, $lot_id) {
     if ($result) {
         return $result;
     }
-        $error = mysqli_error($con);
-        return $error;
-
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -306,10 +317,11 @@ function add_winner ($con, $winer_id, $lot_id) {
  * @return [Array | String] $user_date массив
  * или описание последней ошибки подключения
  */
-function get_user_contacts ($con, $id) {
+function get_user_contacts($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT users.user_name, users.email, users.contacts FROM users
     WHERE id=$id;";
@@ -329,10 +341,11 @@ function get_user_contacts ($con, $id) {
  * @return [Array | String] $data массив
  * или описание последней ошибки подключения
  */
-function get_user_win ($con, $id) {
+function get_user_win($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT lots.id, lots.title, users.user_name, users.contacts
     FROM bets
@@ -355,10 +368,11 @@ function get_user_win ($con, $id) {
  * @return [Array | String] $contacts массив
  * или описание последней ошибки подключения
  */
-function get_user_tell ($con, $id) {
+function get_user_tell($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT  users.contacts AS tell FROM lots
     JOIN users ON users.id=lots.user_id
@@ -370,7 +384,6 @@ function get_user_tell ($con, $id) {
     }
     $error = mysqli_error($con);
     return $error;
-
 }
 
 /**
@@ -380,10 +393,11 @@ function get_user_tell ($con, $id) {
  * @return [int | String] $count Количество лотов
  * или описание последней ошибки подключения
  */
-function get_count_lot_cat ($con, $id) {
+function get_count_lot_cat($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $sql = "SELECT COUNT(*) as cnt FROM lots
     WHERE category_id=$id";
@@ -403,20 +417,21 @@ function get_count_lot_cat ($con, $id) {
  * @return [Array | String] $goods Двумерный массив лотов, в названии или описании которых есть такие слова
  * или описание последней ошибки подключения
  */
-function get_lots_cat ($con, $id, $limit, $offset) {
+function get_lots_cat($con, $id, $limit, $offset)
+{
     if (!$con) {
         $error = mysqli_connect_error();
         return $error;
-        }
-        $sql = "SELECT * FROM lots
+    }
+    $sql = "SELECT * FROM lots
         WHERE category_id=$id ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
-        $result = mysqli_query($con, $sql);
-        if ($result) {
-            $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            return $goods;
-        }
-        $error = mysqli_error($con);
-        return $error;
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $goods;
+    }
+    $error = mysqli_error($con);
+    return $error;
 }
 
 /**
@@ -426,10 +441,11 @@ function get_lots_cat ($con, $id, $limit, $offset) {
  * @return [String | String] $count Количество лотов
  * или описание последней ошибки подключения
  */
-function get_category_name ($con, $id) {
+function get_category_name($con, $id)
+{
     if (!$con) {
-    $error = mysqli_connect_error();
-    return $error;
+        $error = mysqli_connect_error();
+        return $error;
     }
     $id = intval($id);
     $sql = "SELECT name_category FROM categories
@@ -441,5 +457,4 @@ function get_category_name ($con, $id) {
     }
     $error = mysqli_error($con);
     return $error;
-
 }
