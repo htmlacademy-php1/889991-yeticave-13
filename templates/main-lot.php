@@ -12,7 +12,7 @@
             </div>
             <div class="lot-item__right">
             <?php $time = get_time_left($lot["date_finish"]) ?>
-            <?php if ($is_auth && array_sum($time) && $lot["user_id"] !== $_SESSION["id"] && $history[0]["user_name"] !== $_SESSION["name"]): ?>
+            <?php if ($is_auth && array_sum($time) && $lot["user_id"] !== $_SESSION["id"] && $name_user !== $_SESSION["name"]): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer <?php if ($time[0] < 1): ?>timer--finishing<?php endif; ?>">
                         <?= "$time[0] : $time[1]"; ?>

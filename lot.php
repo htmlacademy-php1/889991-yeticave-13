@@ -39,7 +39,12 @@ if(!$lot) {
 }
 
 $history = get_bets_history($con, $id);
-$current_price = max($lot["start_price"], $history[0]["price_bet"]);
+if (!empty($history)) {
+    $current_price = max($lot["start_price"], $history[0]["price_bet"]);
+} else {
+    $current_price = $lot["start_price"];
+}
+$name_user = $history[0]["user_name"] ?? '';
 $min_bet = $current_price + $lot["step"];
 
 $header = include_template("header.php", [
@@ -53,7 +58,8 @@ $page_content = include_template("main-lot.php", [
     "current_price" => $current_price,
     "min_bet" => $min_bet,
     "id" => $id,
-    "history" => $history
+    "history" => $history,
+    "name_user" => $name_user
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -76,7 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "min_bet" => $min_bet,
             "error" => $error,
             "id" => $id,
-            "history" => $history
+            "history" => $history,
+            "name_user" => $name_user
         ]);
     } else {
         $res = add_bet_database($con, $bet, $_SESSION["id"], $id);
