@@ -1,12 +1,12 @@
 <main>
 <?= $header; ?>
 <?php $classname = isset($errors) ? "form--invalid" : ""; ?>
-<form class="form container <?= $classname; ?>" action="login.php" method="post"> 
+<form class="form container <?= $classname; ?>" action="login.php" method="post">
     <h2>Вход</h2>
     <?php $classname = isset($errors["email"]) ? "form__item--invalid" : ""; ?>
     <div class="form__item <?= $classname; ?>">
         <label for="email">E-mail <sup>*</sup></label>
-        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $user_info['email'] ;?>">
+        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $user_info['email'] ?? '';?>">
         <span class="form__error"><?= $errors["email"]; ?></span>
     </div>
     <?php $classname = isset($errors["password"]) ? "form__item--invalid" : ""; ?>

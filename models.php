@@ -423,7 +423,7 @@ function get_lots_cat($con, $id, $limit, $offset)
         $error = mysqli_connect_error();
         return $error;
     }
-    $sql = "SELECT * FROM lots
+    $sql = "SELECT * FROM lots JOIN categories ON lots.category_id=categories.id
         WHERE category_id=$id ORDER BY date_creation DESC LIMIT $limit OFFSET $offset;";
     $result = mysqli_query($con, $sql);
     if ($result) {

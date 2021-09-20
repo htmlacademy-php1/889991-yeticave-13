@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors)) {
         $page_content = include_template("main-login.php", [
             "categories" => $categories,
+            "header" => $header,
             "user_info" => $user_info,
             "errors" => $errors
         ]);

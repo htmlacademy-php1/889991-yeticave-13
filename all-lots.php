@@ -30,7 +30,7 @@ $page_content = include_template("main-all-lots.php", [
     "cat_id" => $cat_id,
     "goods" => $goods,
     "header" => $header,
-    "pagination" => $pagination,
+    "pagination" => $pagination ?? false,
     "pages_count" => $pages_count,
     "pages" => $pages,
     "cur_page" => $cur_page
@@ -39,7 +39,6 @@ $layout_content = include_template("layout.php", [
     "content" => $page_content,
     "categories" => $categories,
     "title" => "Лоты категории '$category_name'",
-    "search" => $search,
     "is_auth" => $is_auth,
     "user_name" => $user_name
 ]);

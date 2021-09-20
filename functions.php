@@ -100,12 +100,12 @@ function get_arrow($result_query)
 {
     $row = mysqli_num_rows($result_query);
     if ($row === 1) {
-        $arrow = mysqli_fetch_assoc($result_query);
-    } elseif ($row > 1) {
-        $arrow = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
+        return mysqli_fetch_assoc($result_query);
     }
-
-    return $arrow;
+    if ($row > 1) {
+        return mysqli_fetch_all($result_query, MYSQLI_ASSOC);
+    }
+    return false;
 }
 
 /**
